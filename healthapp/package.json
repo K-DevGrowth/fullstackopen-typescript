@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "calculateBmi": "tsx bmiCalculator.ts"
+    "calculateBmi": "tsx bmiCalculator.ts",
+    "calculateExercises": "tsx exerciseCalculator.ts"
   },
   "devDependencies": {
     "tsx": "^4.23.0",
