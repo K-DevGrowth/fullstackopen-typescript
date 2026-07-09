@@ -1,4 +1,4 @@
-import { isNotNumber } from "./utils";
+import { isNotNumber } from "./utils.js";
 
 interface Exercises {
   periodLength: number;
