@@ -19,7 +19,7 @@ const parseArguments = (args: string[]): BmiValues => {
   }
 };
 
-const calculateBmi = (heightCm: number, weightKg: number) => {
+export const calculateBmi = (heightCm: number, weightKg: number) => {
   const heightM = heightCm / 100;
   const result = weightKg / (heightM * heightM);
 
@@ -45,13 +45,16 @@ const calculateBmi = (heightCm: number, weightKg: number) => {
   }
 };
 
-try {
-  const { heightCm, weightKg } = parseArguments(process.argv);
-  console.log(calculateBmi(heightCm, weightKg));
-} catch (error) {
-  let errorMessage = "Something bad happend.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (process.argv[1] === import.meta.filename) {
+  // do not run this code if module is imported
+  try {
+    const { heightCm, weightKg } = parseArguments(process.argv);
+    console.log(calculateBmi(heightCm, weightKg));
+  } catch (error) {
+    let errorMessage = "Something bad happend.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
