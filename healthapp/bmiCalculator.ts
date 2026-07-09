@@ -1,6 +1,27 @@
-const calculateBmi = (heightCm: number, weightKg: number): string => {
+import { isNotNumber } from "./utils";
+
+interface BmiValues {
+  heightCm: number;
+  weightKg: number;
+}
+
+const parseArguments = (args: string[]): BmiValues => {
+  if (args.length < 4) throw new Error("Not enought arguments");
+  if (args.length > 4) throw new Error("Too many arguments");
+
+  if (!isNotNumber(args[2]) && !isNotNumber(args[3])) {
+    return {
+      heightCm: Number(args[2]),
+      weightKg: Number(args[3]),
+    };
+  } else {
+    throw new Error("Provided values were not numbers!");
+  }
+};
+
+const calculateBmi = (heightCm: number, weightKg: number) => {
   const heightM = heightCm / 100;
-  const result =  weightKg / (heightM * heightM);
+  const result = weightKg / (heightM * heightM);
 
   switch (true) {
     case result < 16.0:
@@ -22,6 +43,15 @@ const calculateBmi = (heightCm: number, weightKg: number): string => {
     default:
       throw new Error("Please provided a number");
   }
-}
+};
 
-console.log(calculateBmi(180, 74))
+try {
+  const { heightCm, weightKg } = parseArguments(process.argv);
+  console.log(calculateBmi(heightCm, weightKg));
+} catch (error) {
+  let errorMessage = "Something bad happend.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
