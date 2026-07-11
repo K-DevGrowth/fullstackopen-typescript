@@ -1,10 +1,11 @@
 import express from "express";
 import diagnosesRouter from "./routes/diagnoses.ts";
 import patientRouter from "./routes/patientRouter.ts";
+import { errorMiddleware } from "./middleware.ts";
 
 const app = express();
 app.use(express.json());
-const PORT = 3000;
+const PORT = 3001;
 
 app.get("/api/ping", (_req, res) => {
   console.log("someone pinged here");
@@ -13,6 +14,8 @@ app.get("/api/ping", (_req, res) => {
 
 app.use("/api/diagnoses", diagnosesRouter);
 app.use("/api/patients", patientRouter);
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server running on the port http://localhost:${PORT}`);

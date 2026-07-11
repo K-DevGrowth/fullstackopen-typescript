@@ -1,3 +1,6 @@
+import type { z } from "zod";
+import type { NewPatientSchema } from "./middleware.ts";
+
 export type Code =
   | "M24.2"
   | "M51.2"
@@ -40,4 +43,8 @@ export interface PatientEntry {
 
 export type NonSensitivePatient = Omit<PatientEntry, "ssn">[];
 
-export type NewPatientEntry = Omit<PatientEntry, "id">[];
+export type NewPatientEntry = z.infer<typeof NewPatientSchema>;
+
+export interface PatientEntry extends NewPatientEntry {
+  id: string;
+}
