@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { NewPatientSchema } from "./middleware.ts";
+import type { NewPatientSchema, BaseEntrySchema } from "./middleware.ts";
 
 export type Code =
   | "M24.2"
@@ -39,12 +39,54 @@ export interface PatientEntry {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[];
 }
 
-export type NonSensitivePatient = Omit<PatientEntry, "ssn">[];
+export type NonSensitivePatient = Omit<PatientEntry, "ssn" | "entries">;
 
 export type NewPatientEntry = z.infer<typeof NewPatientSchema>;
+
+export type NewEntryPatient = z.infer<typeof BaseEntrySchema>;
 
 export interface PatientEntry extends NewPatientEntry {
   id: string;
 }
+
+interface BaseEntry {
+  id: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<DiagnosisEntry["code"]>;
+}
+
+interface HospitalEntry extends BaseEntry {
+  type: "Hospital";
+  discharge: object;
+}
+
+interface OccupationalHealthcareEntry extends BaseEntry {
+  type: "OccupationalHealthcare";
+  employerName: string;
+  sickLeave?: object;
+}
+
+export const HealthCheckRating = {
+  Healthy: 0,
+  LowRisk: 1,
+  HighRisk: 2,
+  CriticalRisk: 3,
+} as const;
+
+type HealthCheckRating =
+  (typeof HealthCheckRating)[keyof typeof HealthCheckRating];
+
+interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck";
+  healthCheckRating: HealthCheckRating;
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
