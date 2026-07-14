@@ -42,7 +42,6 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
   const newPatientEntry: PatientEntry = {
     ...entry,
     id: uuid(),
-    ssn: "",
     entries: [],
   };
 
